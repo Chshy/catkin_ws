@@ -1,0 +1,8 @@
+prefix=/home/ubuntu/catkin_ws/devel
+
+Name: t265_drv
+Description: Description of t265_drv
+Version: 0.0.0
+Cflags: -I/home/ubuntu/catkin_ws/src/t265_drv/include
+Libs: -L${prefix}/lib 
+Requires: 
