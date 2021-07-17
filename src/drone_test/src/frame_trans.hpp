@@ -1,5 +1,5 @@
 #include <iostream>
-#include <ros/ros.h> 
+#include <ros/ros.h>
 #include <geometry_msgs/PoseStamped.h>
 #include <nav_msgs/Odometry.h>
 #include "std_msgs/Float64.h"
@@ -16,17 +16,14 @@
 #include <ros/duration.h>
 using namespace std;
 
-
 #define CALIB_TIME 30
-
 
 //起飞地点在飞控ENU下的坐标
 geometry_msgs::PoseStamped POSE_OFFSET;
 
 //起飞航向在飞控ENU下的Yaw
 float YAW_OFFSET;
-float YAW_OFFSET_COS,YAW_OFFSET_SIN;
-
+float YAW_OFFSET_COS, YAW_OFFSET_SIN;
 
 //重置偏置值
 void offset_reset()
@@ -37,12 +34,12 @@ void offset_reset()
     YAW_OFFSET = 0;
     YAW_OFFSET_COS = 1;
     YAW_OFFSET_SIN = 0;
+    return;
 }
 
 //设定偏置值
-void offset_calib(  const std_msgs::Float64ConstPtr &fcu_heading_addr,    \
-                    const geometry_msgs::PoseStamped::ConstPtr &fcu_pose_addr
-                    )
+void offset_calib(const std_msgs::Float64ConstPtr &fcu_heading_addr,
+                  const geometry_msgs::PoseStamped::ConstPtr &fcu_pose_addr)
 {
 
     for (int i = 1; i <= CALIB_TIME; ++i)
@@ -68,27 +65,21 @@ void offset_calib(  const std_msgs::Float64ConstPtr &fcu_heading_addr,    \
 
     // ROS_INFO("the N' axis is facing: %f", GYM_OFFSET);
     // cout << GYM_OFFSET << endl;
-    
+
+    return;
 }
 
-
-
 /////////////// 以下为坐标转换实现 ///////////////
-
-
 
 float yaw_fcu2gym(float fcuyaw)
 {
     return fcuyaw - YAW_OFFSET;
 }
 
-float yaw_fcu2gym(float gymyaw)
+float yaw_gym2fcu(float gymyaw)
 {
     return gymyaw + YAW_OFFSET;
 }
-
-
-
 
 //注意Yaw变换！！
 
@@ -96,46 +87,41 @@ float yaw_fcu2gym(float gymyaw)
 //所以坐标的加减要在方向统一的情况下做
 //即在Yaw0是E方向的时候
 
-
-void frame_fcu2gym(float* x, float* y, float* z)
+void frame_fcu2gym(float *x, float *y, float *z)
 {
     *z -= POSE_OFFSET.pose.position.z;
 
-    float tx,ty;
+    float tx, ty;
     tx = *x - POSE_OFFSET.pose.position.x;
     ty = *y - POSE_OFFSET.pose.position.y;
 
     *x = tx * YAW_OFFSET_COS + ty * YAW_OFFSET_SIN;
     *y = ty * YAW_OFFSET_COS - tx * YAW_OFFSET_SIN;
+    return;
 }
 
-void frame_gym2fcu(float* x, float* y, float* z)
+void frame_gym2fcu(float *x, float *y, float *z)
 {
     *z += POSE_OFFSET.pose.position.z;
 
     //sin(-x)=-sin(x)
     //cos(-x)=cos(x)
-    float tx,ty;
+    float tx, ty;
     tx = *x * YAW_OFFSET_COS - *y * YAW_OFFSET_SIN;
     ty = *y * YAW_OFFSET_COS + *x * YAW_OFFSET_SIN;
     *x = tx + POSE_OFFSET.pose.position.x;
     *y = ty + POSE_OFFSET.pose.position.y;
+    return;
 }
-
-
-
-
-
-
 
 geometry_msgs::PoseStamped frame_fcu2gym(geometry_msgs::PoseStamped pose)
 {
-    frame_fcu2gym(pose.pose.position.x,pose.pose.position.y,pose.pose.position.z);
+    frame_fcu2gym(pose.pose.position.x, pose.pose.position.y, pose.pose.position.z);
     return pose;
 }
 
 geometry_msgs::PoseStamped frame_gym2fcu(geometry_msgs::PoseStamped pose)
 {
-    frame_gym2fcu(pose.pose.position.x,pose.pose.position.y,pose.pose.position.z);
+    frame_gym2fcu(pose.pose.position.x, pose.pose.position.y, pose.pose.position.z);
     return pose;
 }

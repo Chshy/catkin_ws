@@ -12,10 +12,8 @@
     
 **********************************************/
 
-
-
 #include <iostream>
-#include <ros/ros.h> 
+#include <ros/ros.h>
 #include <geometry_msgs/PoseStamped.h>
 #include <nav_msgs/Odometry.h>
 #include "std_msgs/Float64.h"
