@@ -72,6 +72,8 @@ void offset_calib(const std_msgs::Float64 * fcu_heading_addr,
 
     // ROS_INFO("the N' axis is facing: %f", GYM_OFFSET);
     // cout << GYM_OFFSET << endl;
+    ROS_INFO("YAW_OFFSET = %lf",YAW_OFFSET);
+    ROS_INFO("POSE_OFFSET E = %lf N = %lf U = %lf",POSE_OFFSET.pose.position.x,POSE_OFFSET.pose.position.y,POSE_OFFSET.pose.position.z);
 
     return;
 }

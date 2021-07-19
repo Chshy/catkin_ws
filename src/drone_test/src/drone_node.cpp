@@ -25,6 +25,7 @@ using namespace std;
 
 int main(int argc, char **argv)
 {
+    offset_reset();
     ros::init(argc, argv, "offb_node"); //初始化节点名称和其他信息
     ros::NodeHandle nh;                 //创建节点的句柄 它可以用来创建Publisher、Subscriber以及做其他事情
 
@@ -57,23 +58,6 @@ int main(int argc, char **argv)
 
     ROS_INFO("GUIDED = True");
 
-
-    /*
-    //MAV:33
-    //set the orientation of the gym 
-    //检测飞行场地相对于ENU的Yaw角度
-    GYM_OFFSET = 0;
-    for (int i = 1; i <= 30; ++i)
-    {
-        ros::spinOnce();            //处理消息订阅
-        ros::Duration(0.1).sleep(); //Sleep 0.1s
-        GYM_OFFSET += current_heading.data;
-        ROS_INFO("current heading%d: %f", i, GYM_OFFSET / i);
-    }
-    GYM_OFFSET /= 30;
-    ROS_INFO("the N' axis is facing: %f", GYM_OFFSET);
-    cout << GYM_OFFSET << endl;
-    */
    
     //等待飞控连接
     // wait for FCU connection
@@ -84,24 +68,6 @@ int main(int argc, char **argv)
     }
 
 
-//while(1)
-//{
-    //飞控解锁(Request) CMD:400
-    // arming
-/*
-    ros::ServiceClient arming_client_i = nh.serviceClient<mavros_msgs::CommandBool>("mavros/cmd/arming");
-    mavros_msgs::CommandBool srv_arm_i;
-    srv_arm_i.request.value = true;
-
-    if (arming_client_i.call(srv_arm_i) && srv_arm_i.response.success)
-        ROS_INFO("ARM sent %d", srv_arm_i.response.success);
-    else
-    {
-        ROS_ERROR("Failed arming");
-        return -1;
-    }
-*/
-//}
 
     //起飞请求(Request)  CMD:22
     //request takeoff
@@ -115,6 +81,7 @@ int main(int argc, char **argv)
 
         // int x=1;
         offset_calib( &fcu_heading , &fcu_pose );
+        
         // offset_calib( &fcu_heading , &x );
 
         // POSE_OFFSET = current_pose;
