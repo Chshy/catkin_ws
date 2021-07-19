@@ -15,9 +15,9 @@
 #include <math.h>
 #include <ros/duration.h>
 
-#include "frame_trans.hpp"
-#include "basic_info_callback.hpp"
-#include "destination_set.hpp"
+#include "drone_test/frame_trans.hpp"
+#include "drone_test/basic_info_callback.hpp"
+#include "drone_test/destination_set.hpp"
 
 
 using namespace std;
@@ -113,7 +113,9 @@ int main(int argc, char **argv)
     {
         ROS_INFO("takeoff sent %d", srv_takeoff.response.success);
 
+        // int x=1;
         offset_calib( &fcu_heading , &fcu_pose );
+        // offset_calib( &fcu_heading , &x );
 
         // POSE_OFFSET = current_pose;
         // ROS_INFO("POSE_OFFSET E=%lf N=%lf U=%lf", POSE_OFFSET.pose.position.x,POSE_OFFSET.pose.position.y,POSE_OFFSET.pose.position.z);

@@ -40,8 +40,13 @@ void offset_reset()
 }
 
 //设定偏置值
-void offset_calib(const std_msgs::Float64ConstPtr fcu_heading_addr,
-                  const geometry_msgs::PoseStamped::ConstPtr fcu_pose_addr)
+// void offset_calib(const std_msgs::Float64::ConstPtr &fcu_heading_addr,
+//                   const geometry_msgs::PoseStamped::ConstPtr &fcu_pose_addr)
+
+
+
+void offset_calib(const std_msgs::Float64 * fcu_heading_addr,
+                  const geometry_msgs::PoseStamped * fcu_pose_addr)
 {
 
     for (int i = 1; i <= CALIB_TIME; ++i)
