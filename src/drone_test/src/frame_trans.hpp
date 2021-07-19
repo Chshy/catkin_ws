@@ -1,3 +1,5 @@
+#pragma once
+
 #include <iostream>
 #include <ros/ros.h>
 #include <geometry_msgs/PoseStamped.h>
@@ -38,8 +40,8 @@ void offset_reset()
 }
 
 //设定偏置值
-void offset_calib(const std_msgs::Float64ConstPtr &fcu_heading_addr,
-                  const geometry_msgs::PoseStamped::ConstPtr &fcu_pose_addr)
+void offset_calib(const std_msgs::Float64ConstPtr fcu_heading_addr,
+                  const geometry_msgs::PoseStamped::ConstPtr fcu_pose_addr)
 {
 
     for (int i = 1; i <= CALIB_TIME; ++i)
@@ -116,12 +118,12 @@ void frame_gym2fcu(float *x, float *y, float *z)
 
 geometry_msgs::PoseStamped frame_fcu2gym(geometry_msgs::PoseStamped pose)
 {
-    frame_fcu2gym(pose.pose.position.x, pose.pose.position.y, pose.pose.position.z);
+    frame_fcu2gym((float*)&pose.pose.position.x, (float*)&pose.pose.position.y, (float*)&pose.pose.position.z);
     return pose;
 }
 
 geometry_msgs::PoseStamped frame_gym2fcu(geometry_msgs::PoseStamped pose)
 {
-    frame_gym2fcu(pose.pose.position.x, pose.pose.position.y, pose.pose.position.z);
+    frame_gym2fcu((float*)&pose.pose.position.x, (float*)&pose.pose.position.y, (float*)&pose.pose.position.z);
     return pose;
 }
